@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Silent Epidemic: Lead Poisoning in Africa</title>
+    <meta name="description" content="An interactive investigation into how the failure to safely recycle lead batteries is poisoning a generation of African children. Data-driven analysis of the global lead crisis.">
+    <meta property="og:title" content="The Silent Epidemic: Lead Poisoning in Africa">
+    <meta property="og:description" content="800 million children have elevated blood lead levels. 765 million IQ points are lost every year. Explore the crisis.">
+    <meta property="og:type" content="article">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">An Interactive Investigation</p>
+        <h1 class="hero-title">The Silent<br>Epidemic</h1>
+        <p class="hero-subtitle">How the failure to safely recycle lead batteries is poisoning a generation of African children</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-number" data-target="800">0</span><span class="hero-stat-suffix">M</span>
+                <span class="hero-stat-label">Children with elevated<br>blood lead levels globally</span>
+                <span class="hero-stat-cite">UNICEF/Pure Earth, 2020</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+                <span class="hero-stat-number" data-target="765">0</span><span class="hero-stat-suffix">M</span>
+                <span class="hero-stat-label">IQ points lost<br>every year</span>
+                <span class="hero-stat-cite">Larsen &amp; Sanchez-Triana, Lancet 2023</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+                <span class="hero-stat-number" data-target="5.5">0</span><span class="hero-stat-suffix">M</span>
+                <span class="hero-stat-label">Deaths annually from<br>lead-related cardiovascular disease</span>
+                <span class="hero-stat-cite">Larsen &amp; Sanchez-Triana, Lancet 2023</span>
+            </div>
+        </div>
+        <a href="#scale" class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+    </div>
+</section>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <a href="#hero" class="nav-logo">Lead Crisis</a>
+        <div class="nav-links">
+            <a href="#scale" class="nav-link">The Scale</a>
+            <a href="#map" class="nav-link">Hotspots</a>
+            <a href="#battery" class="nav-link">Battery Crisis</a>
+            <a href="#iq" class="nav-link">IQ Impact</a>
+            <a href="#economics" class="nav-link">Economic Cost</a>
+            <a href="#timeline" class="nav-link">Timeline</a>
+            <a href="#solutions" class="nav-link">Solutions</a>
+            <a href="#sources" class="nav-link">Sources</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Scale Section -->
+<section class="section section-dark" id="scale">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">The Scale of the Crisis</h2>
+            <p class="section-description">Lead poisoning is the world's most widespread environmental health crisis, yet it remains largely invisible. One in three children globally has blood lead levels above the safety threshold<span class="inline-cite">(UNICEF/Pure Earth, The Toxic Truth, 2020)</span> &mdash; and the burden falls overwhelmingly on Africa and South Asia.<span class="inline-cite">(IHME GBD 2019; Larsen &amp; Sanchez-Triana 2023)</span></p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <div class="comparison-icon">
+                    <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 42c0-8.8 7.2-16 16-16s16 7.2 16 16" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="comparison-number">1 in 3</div>
+                <div class="comparison-label">children globally have elevated blood lead</div>
+                <div class="comparison-context">~800 million children with BLL &ge; 5 &micro;g/dL</div>
+                <div class="comparison-cite">UNICEF/Pure Earth, "The Toxic Truth," 2020</div>
+            </div>
+            <div class="comparison-card accent">
+                <div class="comparison-icon">
+                    <svg viewBox="0 0 48 48" width="48" height="48"><path d="M24 4l6 12h14l-11 8 4 14-13-9-13 9 4-14L4 16h14z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="comparison-number">5.5M</div>
+                <div class="comparison-label">die annually from lead-related CVD</div>
+                <div class="comparison-context">More than HIV, malaria &amp; TB combined</div>
+                <div class="comparison-cite">Larsen &amp; Sanchez-Triana, Lancet Planet. Health, 2023</div>
+            </div>
+            <div class="comparison-card">
+                <div class="comparison-icon">
+                    <svg viewBox="0 0 48 48" width="48" height="48"><rect x="6" y="6" width="36" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 24h16M24 16v16" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="comparison-number">$6T</div>
+                <div class="comparison-label">annual global economic cost</div>
+                <div class="comparison-context">6.9% of global GDP &mdash; larger than Japan's economy</div>
+                <div class="comparison-cite">Larsen &amp; Sanchez-Triana, Lancet Planet. Health, 2023</div>
+            </div>
+            <div class="comparison-card">
+                <div class="comparison-icon">
+                    <svg viewBox="0 0 48 48" width="48" height="48"><path d="M12 36V20M24 36V12M36 36V24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                </div>
+                <div class="comparison-number">90%</div>
+                <div class="comparison-label">of lead deaths occur in LMICs</div>
+                <div class="comparison-context">Africa &amp; South Asia bear the heaviest burden</div>
+                <div class="comparison-cite">CGDev assessment of Lancet Planet. Health, 2023</div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h3 class="chart-title">Children with Elevated Blood Lead by Region</h3>
+                <p class="chart-subtitle">Percentage of children with BLL &ge; 5 &micro;g/dL (2019)</p>
+                <canvas id="childrenByRegionChart"></canvas>
+                <p class="chart-source">Source: Ericson et al., Lancet Planetary Health, 2021; IHME GBD 2019</p>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Mean Blood Lead Levels: LMICs vs High-Income</h3>
+                <p class="chart-subtitle">&micro;g/dL, GBD 2019 estimates</p>
+                <canvas id="bllComparisonChart"></canvas>
+                <p class="chart-source">Source: IHME Global Burden of Disease Study 2019</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Map Section -->
+<section class="section" id="map">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Hotspots of Contamination</h2>
+            <p class="section-description">From the mining waste piles of Kabwe, Zambia<span class="inline-cite">(HRW, Poisonous Profit, 2025)</span> to the informal battery-breaking yards of Ogijo, Nigeria,<span class="inline-cite">(The Examination, 2024)</span> lead contamination has created devastating hotspots across Africa. Click on any marker to explore the story behind each site.</p>
+        </div>
+        <div class="map-wrapper">
+            <div id="leaflet-map"></div>
+            <div class="map-legend">
+                <h4>Severity</h4>
+                <div class="legend-item"><span class="legend-dot critical"></span> Critical (deaths reported)</div>
+                <div class="legend-item"><span class="legend-dot severe"></span> Severe (mass poisoning)</div>
+                <div class="legend-item"><span class="legend-dot elevated"></span> Elevated contamination</div>
+                <div class="legend-item"><span class="legend-dot comparison"></span> Global comparison site</div>
+            </div>
+        </div>
+        <div id="site-detail" class="site-detail hidden">
+            <button class="site-detail-close" onclick="closeSiteDetail()">&times;</button>
+            <div id="site-detail-content"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Battery Crisis Section -->
+<section class="section section-dark" id="battery">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">The Battery Recycling Crisis</h2>
+            <p class="section-description">86% of all lead produced globally goes into lead-acid batteries.<span class="inline-cite">(UNEP, Used Lead Acid Batteries)</span> In Africa, where solar energy is booming and telecom towers run on backup power, the vast majority of spent batteries are recycled by hand in informal workshops &mdash; releasing deadly lead dust into homes, schools, and markets.</p>
+        </div>
+
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="process-number">1</div>
+                <div class="process-icon">
+                    <svg viewBox="0 0 64 64" width="64" height="64"><rect x="16" y="8" width="32" height="48" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><rect x="22" y="4" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="22" y1="24" x2="42" y2="24" stroke="currentColor" stroke-width="2"/><line x1="22" y1="36" x2="42" y2="36" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <h4>Collection</h4>
+                <p>Informal networks collect spent batteries from garages, telecom towers, and solar installations.<span class="inline-cite">(UNEP; UNICEF/Pure Earth, 2020)</span></p>
+            </div>
+            <div class="process-arrow">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </div>
+            <div class="process-step danger">
+                <div class="process-number">2</div>
+                <div class="process-icon">
+                    <svg viewBox="0 0 64 64" width="64" height="64"><path d="M32 8L4 56h56L32 8z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="32" y1="24" x2="32" y2="40" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="48" r="2" fill="currentColor"/></svg>
+                </div>
+                <h4>Breaking</h4>
+                <p>Workers use machetes and axes to crack casings. Sulfuric acid is dumped on the ground.<span class="inline-cite">(Mongabay, 2026; Yale E360)</span></p>
+            </div>
+            <div class="process-arrow">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </div>
+            <div class="process-step danger">
+                <div class="process-number">3</div>
+                <div class="process-icon">
+                    <svg viewBox="0 0 64 64" width="64" height="64"><path d="M20 56c0-12 8-20 12-28s-4-20-4-20" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 56c0-12 8-20 12-28s-4-20-4-20" fill="none" stroke="currentColor" stroke-width="2"/><path d="M44 56c0-12 8-20 12-28" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <h4>Open-Air Smelting</h4>
+                <p>Lead plates melted over charcoal fires in residential areas. Lead fumes settle on homes, food, and children.<span class="inline-cite">(The Examination; Mongabay, 2026)</span></p>
+            </div>
+            <div class="process-arrow">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </div>
+            <div class="process-step">
+                <div class="process-number">4</div>
+                <div class="process-icon">
+                    <svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 16v16l12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h4>Waste Disposal</h4>
+                <p>~48% of battery lead enters the environment.<span class="inline-cite">(Univ. of Manchester / Kinally et al.)</span> Lead-oxide dust becomes airborne, leaches into groundwater.</p>
+            </div>
+        </div>
+
+        <div class="stat-highlight-row">
+            <div class="stat-highlight">
+                <div class="stat-highlight-number">50%</div>
+                <div class="stat-highlight-label">of lead-acid batteries in LMICs are recycled informally</div>
+                <div class="stat-highlight-cite">UNICEF/Pure Earth, 2020</div>
+            </div>
+            <div class="stat-highlight">
+                <div class="stat-highlight-number">3.5&ndash;4.7 kg</div>
+                <div class="stat-highlight-label">of lead pollution released per informally recycled battery</div>
+                <div class="stat-highlight-cite">Univ. of Manchester / Kinally et al.</div>
+            </div>
+            <div class="stat-highlight">
+                <div class="stat-highlight-number">90,000</div>
+                <div class="stat-highlight-label">estimated informal recycling sites worldwide</div>
+                <div class="stat-highlight-cite">Pure Earth (Richard Fuller)</div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h3 class="chart-title">Formal vs. Informal Battery Recycling Rates</h3>
+                <p class="chart-subtitle">Percentage recycled through formal channels, by country/region</p>
+                <canvas id="recyclingRatesChart"></canvas>
+                <p class="chart-source">Sources: Battery Council International; Toxics Link (India); UNEP; Pure Earth</p>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Africa's Solar Boom &amp; Battery Waste</h3>
+                <p class="chart-subtitle">Solar panel imports to Africa (MW) &amp; off-grid waste growth</p>
+                <canvas id="solarBoomChart"></canvas>
+                <p class="chart-source">Sources: Ember (solar imports); UNSW/IDS (waste estimates)</p>
+            </div>
+        </div>
+
+        <div class="callout-box">
+            <div class="callout-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="callout-content">
+                <h4>The Solar Paradox</h4>
+                <p>Off-grid solar is essential for Africa's electrification &mdash; but the lead-acid batteries that make it affordable create a toxic waste stream. The Center for Global Development estimates solar systems alone generate <strong>250,000 to 1.5 million tons</strong> of unsafe battery waste annually.<span class="inline-cite">(CGDev, 2024)</span> In Malawi, batteries often fail within a year, and recyclers melt lead over charcoal stoves in busy market streets &mdash; releasing <strong>100&times; the lethal oral dose</strong> per battery.<span class="inline-cite">(University of Manchester / Kinally et al.)</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- IQ Impact Section -->
+<section class="section" id="iq">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title">The Cognitive Catastrophe</h2>
+            <p class="section-description">There is no safe level of lead exposure.<span class="inline-cite">(WHO, Lead Poisoning Fact Sheet; Lanphear et al. 2005)</span> Even tiny amounts cause permanent, irreversible damage to developing brains. The cruelest irony: the steepest IQ loss occurs at the lowest blood lead levels &mdash; meaning children with "moderate" exposure are harmed the most per unit of lead.<span class="inline-cite">(Lanphear et al., EHP, 2005)</span></p>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container large">
+                <h3 class="chart-title">IQ Loss by Blood Lead Level</h3>
+                <p class="chart-subtitle">Cumulative IQ points lost from baseline. The dose-response is <em>supra-linear</em>: harm is greatest at the lowest levels.</p>
+                <canvas id="iqDoseResponseChart"></canvas>
+                <p class="chart-source">Source: Lanphear et al., Environmental Health Perspectives, 2005 (pooled analysis of 1,333 children from 7 cohorts)</p>
+            </div>
+        </div>
+
+        <div class="iq-explainer">
+            <p class="iq-explainer-source"><em>IQ loss estimates from Lanphear et al., Environmental Health Perspectives, 2005 (pooled analysis of 1,333 children)</em></p>
+            <div class="iq-card">
+                <div class="iq-level">3.5 &micro;g/dL</div>
+                <div class="iq-desc">Current CDC reference value <span class="iq-cite">(CDC, 2021)</span></div>
+                <div class="iq-loss">~1.8 IQ points lost</div>
+                <div class="iq-bar" style="--width: 22%"></div>
+            </div>
+            <div class="iq-card">
+                <div class="iq-level">5 &micro;g/dL</div>
+                <div class="iq-desc">Previous safety threshold <span class="iq-cite">(CDC, 2012)</span></div>
+                <div class="iq-loss">~2.5 IQ points lost</div>
+                <div class="iq-bar" style="--width: 31%"></div>
+            </div>
+            <div class="iq-card highlight">
+                <div class="iq-level">5.1 &micro;g/dL</div>
+                <div class="iq-desc">Mean BLL in Sub-Saharan Africa <span class="iq-cite">(GBD 2019)</span></div>
+                <div class="iq-loss">~2.6 IQ points lost per child</div>
+                <div class="iq-bar" style="--width: 32%"></div>
+            </div>
+            <div class="iq-card">
+                <div class="iq-level">10 &micro;g/dL</div>
+                <div class="iq-desc">Former "level of concern" <span class="iq-cite">(CDC, 1991)</span></div>
+                <div class="iq-loss">~5.1 IQ points lost</div>
+                <div class="iq-bar" style="--width: 64%"></div>
+            </div>
+            <div class="iq-card danger">
+                <div class="iq-level">30 &micro;g/dL</div>
+                <div class="iq-desc">Severe exposure <span class="iq-cite">(Lanphear 2005)</span></div>
+                <div class="iq-loss">~8.0 IQ points lost</div>
+                <div class="iq-bar" style="--width: 100%"></div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="col">
+                <h3 class="subsection-title">Lead and the Learning Gap</h3>
+                <p>Lead exposure may account for <strong>20% of the educational achievement gap</strong> between wealthy and poor nations.<span class="inline-cite">(Slow Boring / CGDev analysis)</span> In Sub-Saharan Africa, the geometric mean blood lead level in children under 6 is <strong>13.1 &micro;g/dL</strong> &mdash; nearly 7&times; the US average of 1.9 &micro;g/dL.<span class="inline-cite">(Ericson et al., systematic review of SSA children BLL)</span></p>
+                <p>Lead doesn't just reduce IQ. It accounts for <strong>1 in 5 cases of ADHD</strong> and <strong>30% of idiopathic intellectual disability</strong> worldwide.<span class="inline-cite">(Lanphear, Navas-Acien & Bellinger, NEJM, 2024)</span> Exposed children show reduced attention spans, antisocial behavior, and smaller brain volumes in regions governing executive function.</p>
+            </div>
+            <div class="col">
+                <div class="chart-container">
+                    <h3 class="chart-title">Global IQ Loss Distribution by Region</h3>
+                    <p class="chart-subtitle">765 million IQ points lost annually in children under 5 (2019)</p>
+                    <canvas id="iqDistributionChart"></canvas>
+                    <p class="chart-source">Source: Larsen &amp; Sanchez-Triana, Lancet Planet. Health, 2023</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="threshold-timeline">
+            <h3 class="subsection-title centered">"Safe" Blood Lead Threshold Over Time</h3>
+            <p class="chart-subtitle centered">The threshold has been steadily lowered as science revealed harm at ever-lower levels</p>
+            <div class="threshold-track">
+                <div class="threshold-item" style="--pos: 0%">
+                    <div class="threshold-year">1960s</div>
+                    <div class="threshold-value">60 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item" style="--pos: 16%">
+                    <div class="threshold-year">1970s</div>
+                    <div class="threshold-value">40 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item" style="--pos: 33%">
+                    <div class="threshold-year">1985</div>
+                    <div class="threshold-value">25 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item" style="--pos: 50%">
+                    <div class="threshold-year">1991</div>
+                    <div class="threshold-value">10 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item" style="--pos: 66%">
+                    <div class="threshold-year">2012</div>
+                    <div class="threshold-value">5 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item" style="--pos: 83%">
+                    <div class="threshold-year">2021</div>
+                    <div class="threshold-value">3.5 &micro;g/dL</div>
+                </div>
+                <div class="threshold-item active" style="--pos: 100%">
+                    <div class="threshold-year">Science</div>
+                    <div class="threshold-value">No safe level</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Economics Section -->
+<section class="section section-dark" id="economics">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title">The Economic Devastation</h2>
+            <p class="section-description">Lead poisoning is not just a health crisis &mdash; it is an economic catastrophe. Africa loses more of its GDP to lead exposure than any other region,<span class="inline-cite">(Attina &amp; Trasande, EHP, 2013)</span> trapping communities in cycles of poverty and cognitive impairment.</p>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h3 class="chart-title">Economic Cost of Lead as % of GDP</h3>
+                <p class="chart-subtitle">IQ-related productivity losses by region</p>
+                <canvas id="gdpCostChart"></canvas>
+                <p class="chart-source">Source: Attina &amp; Trasande, Environmental Health Perspectives, 2013</p>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Annual Deaths: Lead vs. Other Causes</h3>
+                <p class="chart-subtitle">Lead-related CVD deaths exceed HIV, malaria &amp; TB combined</p>
+                <canvas id="deathComparisonChart"></canvas>
+                <p class="chart-source">Sources: Larsen &amp; Sanchez-Triana 2023 (lead); WHO Global Health Estimates (others)</p>
+            </div>
+        </div>
+
+        <div class="big-number-row">
+            <div class="big-number-card">
+                <div class="big-number">$134.7B</div>
+                <div class="big-number-label">Africa's annual economic loss from lead exposure</div>
+                <div class="big-number-context">4.03% of continental GDP</div>
+                <div class="big-number-cite">Attina &amp; Trasande, EHP, 2013</div>
+            </div>
+            <div class="big-number-card">
+                <div class="big-number">$17&ndash;$221</div>
+                <div class="big-number-label">returned per $1 spent on lead hazard control</div>
+                <div class="big-number-context">Among the highest ROI of any public health intervention</div>
+                <div class="big-number-cite">Gould, EHP, 2009</div>
+            </div>
+            <div class="big-number-card">
+                <div class="big-number">$15M/yr</div>
+                <div class="big-number-label">total global funding for lead prevention (pre-2024)</div>
+                <div class="big-number-context">For a $6 trillion/year problem</div>
+                <div class="big-number-cite">CGDev, Call to Action, 2023</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="section" id="timeline">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">06</span>
+            <h2 class="section-title">A Crisis Decades in the Making</h2>
+            <p class="section-description">Key events in Africa's lead poisoning crisis &mdash; from industrial disasters to emerging policy responses. Events sourced from peer-reviewed literature, UN reports, and investigative journalism cited below.</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-line"></div>
+            <div class="timeline-item left">
+                <div class="timeline-date">1902</div>
+                <div class="timeline-card">
+                    <h4>Kabwe Lead Mine Opens</h4>
+                    <p>British colonial interests open the "Broken Hill" lead and zinc mine in Zambia. It will operate for 92 years, leaving 6.4 million tons of toxic waste.<span class="inline-cite">(HRW, Poisonous Profit, 2025)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">1994</div>
+                <div class="timeline-card">
+                    <h4>Mine Closes, Waste Remains</h4>
+                    <p>The Kabwe mine shuts down with no comprehensive cleanup. Lead waste piles sit uncovered, blowing toxic dust across residential areas.<span class="inline-cite">(HRW, Poisonous Profit, 2025; NPR, 2025)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">1995</div>
+                <div class="timeline-card">
+                    <h4>Informal Recycling Begins in Senegal</h4>
+                    <p>Residents of Thiaroye-sur-Mer, Dakar, begin breaking apart used car batteries to make fishing weights &mdash; a practice that will prove fatal.<span class="inline-cite">(Haefliger et al., PMC, 2009)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">2007</div>
+                <div class="timeline-card">
+                    <h4>Kenya Smelter Opens</h4>
+                    <p>Metal Refinery EPZ opens a lead-acid battery smelter 50 meters from Owino Uhuru, an informal settlement of ~3,000 people in Mombasa.<span class="inline-cite">(PMC, Soil Lead Contamination Mombasa, 2019; Goldman Prize)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">2008</div>
+                <div class="timeline-card danger">
+                    <h4>18 Children Die in Senegal</h4>
+                    <p>18 children under 5 die from lead encephalopathy in Thiaroye-sur-Mer. Blood lead levels reach 614 &micro;g/dL. All 81 people tested are poisoned.<span class="inline-cite">(Haefliger et al., PMC, 2009)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">2010</div>
+                <div class="timeline-card danger">
+                    <h4>400+ Children Die in Nigeria</h4>
+                    <p>Zamfara State: artisanal gold mining of lead-rich ore kills over 400 children. MSF discovers children with blood lead levels up to 700 &micro;g/dL.<span class="inline-cite">(MSF; PMC Environ. Remediation Zamfara, 2016)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">2014</div>
+                <div class="timeline-card">
+                    <h4>Kenya Smelter Closes</h4>
+                    <p>After years of community activism led by Phyllis Omido (later Goldman Prize winner), the Owino Uhuru smelter is permanently closed.<span class="inline-cite">(Goldman Environmental Prize, 2015; Kenyan court filings)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">2020</div>
+                <div class="timeline-card">
+                    <h4>"The Toxic Truth" Published</h4>
+                    <p>UNICEF and Pure Earth reveal that 1 in 3 children globally &mdash; 800 million &mdash; have elevated blood lead levels. Up to 50% of batteries in LMICs recycled informally.<span class="inline-cite">(UNICEF/Pure Earth, The Toxic Truth, 2020)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">2021</div>
+                <div class="timeline-card">
+                    <h4>Leaded Gasoline Finally Eliminated</h4>
+                    <p>Algeria becomes the last country to phase out leaded gasoline. But batteries, paint, and spices continue to poison millions.<span class="inline-cite">(UNEP, Aug 2021)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">2023</div>
+                <div class="timeline-card">
+                    <h4>Lancet: 5.5 Million Deaths</h4>
+                    <p>Larsen &amp; Sanchez-Triana publish global burden estimate: 5.5M CVD deaths, 765M IQ points lost, $6 trillion/year in costs. 6&times; the prior GBD estimate.<span class="inline-cite">(Larsen &amp; Sanchez-Triana, Lancet Planet. Health, 2023)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">2024</div>
+                <div class="timeline-card">
+                    <h4>$150M+ Partnership Launched</h4>
+                    <p>At the UN General Assembly, USAID and UNICEF launch the "Partnership for a Lead-Free Future" with $150M+ in commitments from 50+ partners.<span class="inline-cite">(USAID/UNICEF, Sept 2024)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-date">2025</div>
+                <div class="timeline-card danger">
+                    <h4>Kabwe Crisis Worsens</h4>
+                    <p>HRW reports the Zambian government has issued new mining licenses for lead waste. Nine new unfenced waste piles appear near homes. Children as young as 7 work in contaminated areas.<span class="inline-cite">(HRW, Poisonous Profit, March 2025)</span></p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-date">2026</div>
+                <div class="timeline-card">
+                    <h4>Pure Earth Audacious Project</h4>
+                    <p>Pure Earth receives major multi-year funding to protect 500+ million children across 20+ countries by 2033.<span class="inline-cite">(Pure Earth / The Audacious Project, Feb 2026)</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solutions Section -->
+<section class="section section-dark" id="solutions">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">07</span>
+            <h2 class="section-title">Solutions Exist</h2>
+            <p class="section-description">Lead poisoning is entirely preventable. For every $1 invested in lead hazard control, up to $221 is returned in health and economic benefits.<span class="inline-cite">(Gould, EHP, 2009)</span> Several proven interventions are ready to scale.</p>
+        </div>
+
+        <div class="solutions-grid">
+            <div class="solution-card">
+                <div class="solution-number">01</div>
+                <h4>Formalize Battery Recycling</h4>
+                <p>Consolidate recycling into high-standard facilities with emissions controls. Ghana's formal sector shows it works: when industrial plants opened in Tema, many informal smelters voluntarily shut down.<span class="inline-cite">(Yale E360; The Examination, 2024)</span></p>
+                <div class="solution-stat">Formal recycling recovers <strong>97%</strong> of lead vs. ~50% for informal <span class="solution-cite">&mdash; Oeko-Institut</span></div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">02</div>
+                <h4>Extended Producer Responsibility</h4>
+                <p>Require battery manufacturers to finance collection and safe recycling. Nigeria's 2024 Battery Control Regulations mandate take-back at no cost to consumers.<span class="inline-cite">(Compliance &amp; Risks, 2024)</span> Brazil's EPR model eliminated informal competition.<span class="inline-cite">(Oeko-Institut, ProBaMet Africa)</span></p>
+                <div class="solution-stat">Nigeria, Kenya, Ghana, South Africa now have EPR frameworks <span class="solution-cite">&mdash; Compliance &amp; Risks, 2024</span></div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">03</div>
+                <h4>Ban Lead Paint</h4>
+                <p>Only 48% of countries have legally binding lead paint controls.<span class="inline-cite">(WHO/UNEP Global Alliance to Eliminate Lead Paint)</span> LEEP has helped pass regulations in Nigeria, Malawi, and Liberia at a cost of just $1.66 per person protected.<span class="inline-cite">(LEEP / Founders Pledge)</span></p>
+                <div class="solution-stat">LEEP saves a DALY for approximately <strong>$14</strong> <span class="solution-cite">&mdash; Founders Pledge / LEEP</span></div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">04</div>
+                <h4>Scale Blood Lead Testing</h4>
+                <p>Two-thirds of LMICs have zero recent blood lead studies.<span class="inline-cite">(Ericson et al., 2021)</span> Without testing, the crisis stays invisible. Ghana's national survey of 3,227 children revealed 53.5% had elevated levels.<span class="inline-cite">(Pure Earth/UNICEF/Ghana Health Service)</span></p>
+                <div class="solution-stat">12 countries committed to BLL surveys since Sept 2024 <span class="solution-cite">&mdash; CGDev, 2025</span></div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">05</div>
+                <h4>Remediate Contaminated Sites</h4>
+                <p>Pure Earth's proven 5-phase approach has cleaned up sites worldwide. In Vietnam, average blood lead dropped from 45 to 8 &micro;g/dL within a year after regulation.<span class="inline-cite">(Pure Earth, Dong Mai Village case study)</span> In Senegal, children's levels fell from 150+ to 53.5 &micro;g/dL.<span class="inline-cite">(Haefliger et al., PMC, 2009)</span></p>
+                <div class="solution-stat">Pure Earth has identified <strong>5,000+ toxic sites</strong> in 50+ countries <span class="solution-cite">&mdash; Pure Earth TSIP</span></div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">06</div>
+                <h4>Transition to Lithium-Ion</h4>
+                <p>As lithium battery costs fall, replacing lead-acid in solar and telecom applications eliminates the waste problem at its source. The telecom sector is already shifting &mdash; LiFePO4 lasts 8&ndash;15 years vs. 2&ndash;3 for lead-acid.<span class="inline-cite">(CGDev / Mongabay, 2026)</span></p>
+                <div class="solution-stat">Cost parity expected within the decade for off-grid solar</div>
+            </div>
+        </div>
+
+        <div class="callout-box light">
+            <div class="callout-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="callout-content">
+                <h4>The Funding Breakthrough</h4>
+                <p>After decades of neglect (just $15M/year globally<span class="inline-cite">(CGDev, 2023)</span>), 2024 marked a turning point. The Partnership for a Lead-Free Future mobilized $150M+.<span class="inline-cite">(USAID/UNICEF, Sept 2024)</span> Bloomberg Philanthropies launched a multi-country prevention initiative. Pure Earth's 2026 Audacious Project targets 500 million children.<span class="inline-cite">(Pure Earth / The Audacious Project, Feb 2026)</span> The Center for Global Development estimates <strong>$350 million through 2030</strong> ($50M/year) would be sufficient to transform the landscape.<span class="inline-cite">(CGDev, Call to Action, 2023)</span> For a $6 trillion/year problem, this is an extraordinary bargain.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sources Section -->
+<section class="section" id="sources">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">08</span>
+            <h2 class="section-title">Sources &amp; Methodology</h2>
+            <p class="section-description">This investigation draws on peer-reviewed research, UN agency data, and investigative journalism.</p>
+        </div>
+
+        <div class="sources-grid">
+            <div class="source-category">
+                <h4>Key Reports</h4>
+                <ul>
+                    <li><a href="https://www.unicef.org/reports/toxic-truth-childrens-exposure-to-lead-pollution-2020" target="_blank">UNICEF &amp; Pure Earth, "The Toxic Truth" (2020)</a></li>
+                    <li><a href="https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(23)00166-3/fulltext" target="_blank">Larsen &amp; Sanchez-Triana, Lancet Planetary Health (2023)</a></li>
+                    <li><a href="https://www.hrw.org/report/2025/03/05/poisonous-profit" target="_blank">Human Rights Watch, "Poisonous Profit" (2025)</a></li>
+                    <li><a href="https://www.nejm.org/doi/abs/10.1056/NEJMra2402527" target="_blank">Lanphear, Navas-Acien &amp; Bellinger, NEJM Review (2024)</a></li>
+                </ul>
+            </div>
+            <div class="source-category">
+                <h4>Foundational Research</h4>
+                <ul>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1257652/" target="_blank">Lanphear et al., IQ Dose-Response (EHP, 2005)</a></li>
+                    <li><a href="https://ehp.niehs.nih.gov/doi/full/10.1289/ehp.1206424" target="_blank">Attina &amp; Trasande, Economic Costs in LMICs (EHP, 2013)</a></li>
+                    <li><a href="https://www.pnas.org/doi/10.1073/pnas.2118631119" target="_blank">McFarland et al., US Population Lead Exposure (PNAS, 2022)</a></li>
+                    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0013935117317243" target="_blank">Gottesfeld et al., Soil Contamination in 7 African Countries (2018)</a></li>
+                </ul>
+            </div>
+            <div class="source-category">
+                <h4>Investigative Journalism</h4>
+                <ul>
+                    <li><a href="https://www.theexamination.org/articles/battery-recycling-nigeria-lead-poisoning-us-automakers" target="_blank">The Examination: Battery Recycling &amp; Nigeria Lead Poisoning</a></li>
+                    <li><a href="https://news.mongabay.com/2026/02/malawis-solar-boom-is-leaving-a-toxic-legacy-of-lead-waste/" target="_blank">Mongabay: Malawi's Solar Boom &amp; Lead Waste (2026)</a></li>
+                    <li><a href="https://e360.yale.edu/features/getting-the-lead-out-why-battery-recycling-is-a-global-health-hazard" target="_blank">Yale E360: Getting the Lead Out</a></li>
+                    <li><a href="https://www.npr.org/sections/goats-and-soda/2025/03/30/g-s1-51935/toxic-mines-zambia-polluted-lead-poisoning" target="_blank">NPR: Kabwe &mdash; Most Lead Polluted Place on Earth (2025)</a></li>
+                </ul>
+            </div>
+            <div class="source-category">
+                <h4>Data Sources</h4>
+                <ul>
+                    <li><a href="https://vizhub.healthdata.org/gbd-results/" target="_blank">IHME Global Burden of Disease Results Tool</a></li>
+                    <li><a href="https://www.who.int/news-room/fact-sheets/detail/lead-poisoning-and-health" target="_blank">WHO Lead Poisoning Fact Sheet</a></li>
+                    <li><a href="https://ourworldindata.org/lead-pollution" target="_blank">Our World in Data: Lead Pollution</a></li>
+                    <li><a href="https://www.contaminatedsites.org/" target="_blank">Pure Earth Contaminated Sites Database</a></li>
+                    <li><a href="https://epi.yale.edu/epi-results/2020/component/pbd" target="_blank">Yale Environmental Performance Index: Lead Exposure</a></li>
+                </ul>
+            </div>
+            <div class="source-category">
+                <h4>Organizations</h4>
+                <ul>
+                    <li><a href="https://www.pureearth.org/global-lead-program/" target="_blank">Pure Earth (Global Lead Program)</a></li>
+                    <li><a href="https://leadelimination.org/" target="_blank">Lead Exposure Elimination Project (LEEP)</a></li>
+                    <li><a href="https://www.cgdev.org/publication/call-action-end-childhood-lead-poisoning" target="_blank">Center for Global Development: Call to Action</a></li>
+                    <li><a href="https://www.pureearth.org/our-projects/toxic-site-identification-program-tsip/" target="_blank">Pure Earth TSIP Database</a></li>
+                </ul>
+            </div>
+            <div class="source-category">
+                <h4>Regional Case Studies</h4>
+                <ul>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2790507/" target="_blank">Mass Lead Intoxication, Dakar (PMC, 2009)</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5010416/" target="_blank">Environmental Remediation, Zamfara Nigeria (PMC, 2016)</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6421950/" target="_blank">Soil Lead Contamination, Mombasa Kenya (PMC, 2019)</a></li>
+                    <li><a href="https://www.oeko.de/blog/upgrading-the-lead-acid-battery-recycling-sector-in-africa/" target="_blank">Oeko-Institut: ProBaMet Africa Project</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="methodology-note">
+            <h4>Methodology Note</h4>
+            <p>Statistics in this report are drawn primarily from the IHME Global Burden of Disease Study 2019/2021, the UNICEF/Pure Earth "Toxic Truth" report (2020), and the Larsen &amp; Sanchez-Triana Lancet Planetary Health study (2023). Blood lead level data for African countries comes from the Ericson et al. systematic review (2021), the Gottesfeld et al. soil contamination study (2018), and individual country studies cited above. We note that two-thirds of LMICs lack recent nationally-representative blood lead data, meaning the true scale of the crisis is likely underestimated. The 5.5 million annual death estimate uses a broader cardiovascular dose-response model than the GBD's 1.5 million estimate; both are cited where relevant. Map coordinates are approximate and indicate the general area of contamination, not precise boundaries.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-title">The Silent Epidemic</p>
+            <p class="footer-subtitle">An interactive investigation into lead poisoning in Africa</p>
+            <p class="footer-note">Research compiled March 2026. Data from WHO, UNICEF, IHME, Pure Earth, and peer-reviewed literature.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
